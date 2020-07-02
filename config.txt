@@ -1,0 +1,13 @@
+input_file=C:\Users\Luciano\Desktop\Programming\Boeing\Projects\JSONProcessingTool\input.txt
+output_file=C:\Users\Luciano\Desktop\Programming\Boeing\Projects\JSONProcessingTool\output.txt
+
+# Leave value empty if you do not want it to be ran
+
+# Date format: MM-dd-yyyy hh:mm:ss
+# Example: 07-01-2020 02:00:10
+
+start_time=
+stop_time=07-01-2020 02:00:10
+
+search_keyword=
+start_keyword=3472
