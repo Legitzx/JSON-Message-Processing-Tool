@@ -32,7 +32,7 @@ public class MessageManager {
 
         if(start == null) {
             for(Message message : messages) {
-                if(message.getDate().before(end)) {
+                if(message.getDate().before(end) || message.getDate().equals(end)) {
                     startStopMessages.add(message);
                 }
             }
@@ -42,7 +42,7 @@ public class MessageManager {
 
         if(end == null) {
             for(Message message : messages) {
-                if(message.getDate().after(start)) {
+                if(message.getDate().after(start) || message.getDate().equals(start)) {
                     startStopMessages.add(message);
                 }
             }
@@ -51,7 +51,7 @@ public class MessageManager {
         }
 
         for(Message message : messages) {
-            if(message.getDate().after(start) && message.getDate().before(end)) {
+            if((message.getDate().after(start) && message.getDate().before(end)) || (message.getDate().toString().equals(start.toString()) || message.getDate().toString().equals(end.toString()))) {
                 startStopMessages.add(message);
             }
         }
@@ -71,13 +71,40 @@ public class MessageManager {
 
         boolean started = false;
 
-        for(Message message : messages) {
-            if(message.getArgs().contains(startKeyword) && !started) {
-                started = true;
-            }
+        if(startKeyword.contains(" ")) { // Handle search strings
+            String[] args = startKeyword.split(" ");
 
-            if(started) {
-                keywordMessages.add(message);
+            for(Message message : messages) {
+                boolean valid = false;
+
+                if(started) {
+                    keywordMessages.add(message);
+                    continue;
+                }
+
+                for(String arg : args) {
+                    if(message.getArgs().contains(arg)) {
+                        valid = true;
+                    } else {
+                        valid = false;
+                        break;
+                    }
+                }
+
+                if(valid) {
+                    keywordMessages.add(message);
+                    started = true;
+                }
+            }
+        } else { // Handle regular keywords
+            for(Message message : messages) {
+                if(message.getArgs().contains(startKeyword) && !started) {
+                    started = true;
+                }
+
+                if(started) {
+                    keywordMessages.add(message);
+                }
             }
         }
 
@@ -93,9 +120,31 @@ public class MessageManager {
     public ArrayList<Message> getMessagesByKeyword(String keyword) {
         ArrayList<Message> keywordMessages = new ArrayList<>();
 
-        for(Message message : messages) {
-            if(message.getArgs().contains(keyword)) {
-                keywordMessages.add(message);
+
+        if(keyword.contains(" ")) { // Handle search strings
+            String[] args = keyword.split(" ");
+
+            boolean valid = false;
+            for(Message message : messages) {
+                for(String arg : args) {
+                    if(message.getArgs().contains(arg)) {
+                        valid = true;
+                    } else {
+                        valid = false;
+                        break;
+                    }
+                }
+
+                if(valid) {
+                    keywordMessages.add(message);
+                    valid = false;
+                }
+            }
+        } else { // Handle keywords without whitespace
+            for(Message message : messages) {
+                if(message.getArgs().contains(keyword)) {
+                    keywordMessages.add(message);
+                }
             }
         }
 
