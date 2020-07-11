@@ -45,7 +45,6 @@ public class Settings {
         setUp();
     }
 
-
     /**
      * Converts strings dates to Date
      * @param raw       string date

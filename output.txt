@@ -1,3 +1,6 @@
-{"timeStamp":"07-01-2020 02:00:05","delayMillis":3472,"properties":{},"body":"keyword"}
-{"timeStamp":"07-01-2020 02:00:09","delayMillis":2692,"properties":{},"body":"test"}
-{"timeStamp":"07-01-2020 02:00:11","delayMillis":2050,"properties":{},"body":"4"}
+{
+  "timeStamp": "07-01-2020 02:00:09",
+  "delayMillis": 2692,
+  "properties": {},
+  "body": "test"
+}

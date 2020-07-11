@@ -109,10 +109,25 @@ public class JsonProcessingTool {
             return;
         }
 
-        System.out.println(messages);
-        try(FileWriter writer = new FileWriter(settings.getOutputFilePath())) {
-            for(Message message : messages) {
-                writer.append(message.getContent() + "\n");
+        LOGGER.info("Found " + messages.size() + " message(s) that fit your specifications.");
+
+        if(settings.isMultiLine()) {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+            try(FileWriter writer = new FileWriter(settings.getOutputFilePath())) {
+                for(Message message : messages) {
+                    JsonElement obj = JsonParser.parseString(message.getContent());
+
+                    String prettyJson = gson.toJson(obj);
+
+                    writer.append(prettyJson + "\n");
+                }
+            }
+        } else {
+            try(FileWriter writer = new FileWriter(settings.getOutputFilePath())) {
+                for(Message message : messages) {
+                    writer.append(message.getContent() + "\n");
+                }
             }
         }
     }
