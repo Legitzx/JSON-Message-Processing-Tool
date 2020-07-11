@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * The MessageManager program manages the messages. It will a range
- * of filter message arrays.
+ * The MessageManager program manages the messages. It will filter
+ * the messages based on the configs values.
  *
  * @author Luciano Kholos
  */
@@ -119,7 +119,6 @@ public class MessageManager {
      */
     public ArrayList<Message> getMessagesByKeyword(String keyword) {
         ArrayList<Message> keywordMessages = new ArrayList<>();
-
 
         if(keyword.contains(" ")) { // Handle search strings
             String[] args = keyword.split(" ");

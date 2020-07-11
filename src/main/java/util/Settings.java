@@ -73,6 +73,11 @@ public class Settings {
         } else {
             timeSearchActive = true;
         }
+
+        if(!searchKeywordActive && !startKeywordActive && !timeSearchActive) {
+            // Something is wrong since all the input values are null
+            // throw some error and handle it
+        }
     }
 
     public boolean isSearchKeywordActive() {

@@ -1,7 +1,6 @@
 package processing;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import config.Config;
 import message.Message;
 import message.MessageManager;
@@ -10,6 +9,7 @@ import util.Settings;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 /**
@@ -25,6 +25,8 @@ public class JsonProcessingTool {
 
     private final MessageManager manager;
 
+    private static final Logger LOGGER = Logger.getLogger(JsonProcessingTool.class.getName());
+
     public JsonProcessingTool(String path, Settings settings) {
         this.path = path;
         this.settings = settings;
@@ -36,30 +38,44 @@ public class JsonProcessingTool {
      * This method will iterate through the input file
      * and load the messages into the MessageManagers
      * container.
-     * @throws IOException
+     * @throws IOException  if input file does not exist
      */
-    public void loadJsonMessages() throws IOException {
-        File file = new File(path);
+    public void loadJsonMessages() {
         Pattern pattern = Pattern.compile("[{}\",:]");
 
-        JsonObject jsonObject;
+        File input = new File(path);
+        if(!input.exists()) {
+            LOGGER.severe("Could not find [input.txt] make sure it is in the directory of the .jar file!");
+            return;
+        }
 
-        // Iterates through each line
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))){
-            String line;
-            while((line = reader.readLine()) != null) {
-                String originalLine = line;
+        try (InputStream is = new FileInputStream(path);
+             Reader r = new InputStreamReader(is, "UTF-8");) {
 
-                // Converting String to JSONObject
-                jsonObject = JsonParser.parseString(line).getAsJsonObject();
-                String timestamp = jsonObject.get("timeStamp").getAsString();
+            JsonStreamParser p = new JsonStreamParser(r);
 
-                // Replaces all unnecessary items
-                line = line.replaceAll(pattern.toString(), " ");
+            while(p.hasNext()) { // Loops through each JSON object in the file
+                JsonElement e = p.next();
+                if (e.isJsonObject()) { // Validates the object
+                    JsonObject obj = e.getAsJsonObject();  // Converts it to a JSON Object
+                    JsonElement timestamp = obj.get("timeStamp"); // Gets the timeStamp
 
-                // Adds the message to the manager
-                manager.addMessage(new Message(originalLine, Arrays.asList(line.split(" ")), settings.rawToDate(timestamp)));
+                    String originalJsonLine = e.toString(); // Un-edited JSON Object
+                    String strippedJsonLine = originalJsonLine; // Edited JSON Object
+                    strippedJsonLine = strippedJsonLine.replaceAll(pattern.toString(), " ");
+
+                    /*
+                    Timestamp of JSON Object
+                    Also replaces " that are present after parsing
+                     */
+                    String timestampRaw = timestamp.toString().replaceAll("\"", "");
+
+                    manager.addMessage(new Message(originalJsonLine, Arrays.asList(strippedJsonLine.split(" ")), settings.rawToDate(timestampRaw)));
+                }
             }
+
+        } catch (Exception e) {
+            LOGGER.severe("Malformed data provided in input.txt");
         }
     }
 

@@ -1,6 +1,8 @@
 package config;
 
 /**
+ * This class is responsible for loading the config
+ *
  * @author Luciano Kholos
  */
 public class Config {

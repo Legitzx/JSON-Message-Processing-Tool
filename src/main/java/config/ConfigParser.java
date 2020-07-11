@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @author Luciano Kholos
  */
 public class ConfigParser {
-    private static final String filePath = "C:\\Users\\Luciano\\Desktop\\Programming\\Boeing\\Projects\\JSONProcessingTool\\config.txt";
+    private static final String filePath = System.getProperty("user.dir") + "\\config.txt";
     private static ArrayList<String> configContent = new ArrayList<>();
 
     private ConfigParser(ArrayList<String> arrayList) {
@@ -19,7 +19,7 @@ public class ConfigParser {
 
     /**
      * Loads the configs content into an array (caching)
-     * @throws IOException      if file does not exist
+     * @throws IOException      if config file does not exist
      */
     public static ConfigParser load() {
         File file = new File(filePath);
@@ -89,7 +89,7 @@ public class ConfigParser {
         char[] lineChars = line.toCharArray();
 
         /*
-        Basically just attempts to see if keyChars[x] == lineChars[x]
+        Basically just attempts to see if the line contains a key
          */
         for(int x = 0; x < lineChars.length; x++) {
 
