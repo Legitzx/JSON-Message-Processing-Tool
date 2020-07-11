@@ -2,6 +2,7 @@ package util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Logger;
 
 /**
  * The Settings program will examine the config
@@ -21,6 +22,8 @@ public class Settings {
     private final Date end;
 
     private final String dateFormat = "MM-dd-yyyy hh:mm:ss";
+
+    private static final Logger LOGGER = Logger.getLogger(Settings.class.getName());
 
     public Settings(String searchKeyword, String startKeyword, String startRaw, String endRaw) {
         this.searchKeyword = searchKeyword;
@@ -77,6 +80,7 @@ public class Settings {
         if(!searchKeywordActive && !startKeywordActive && !timeSearchActive) {
             // Something is wrong since all the input values are null
             // throw some error and handle it
+            LOGGER.severe("Failed to get values from config. Did you forget to edit the config.txt?");
         }
     }
 

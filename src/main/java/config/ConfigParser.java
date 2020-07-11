@@ -2,6 +2,7 @@ package config;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 /**
  * The ConfigParser program extracts data from the config.txt file and
@@ -12,6 +13,8 @@ import java.util.ArrayList;
 public class ConfigParser {
     private static final String filePath = System.getProperty("user.dir") + "\\config.txt";
     private static ArrayList<String> configContent = new ArrayList<>();
+
+    private static final Logger LOGGER = Logger.getLogger(ConfigParser.class.getName());
 
     private ConfigParser(ArrayList<String> arrayList) {
         configContent = arrayList;
@@ -64,12 +67,34 @@ public class ConfigParser {
                     return null;
                 }
 
-                try {
-                    int intValue = Integer.parseInt(value);
-                    return type.cast(intValue);
-                } catch (Exception e) {
+                // Handles Boolean types
+                if(type == Boolean.class) {
+                    // Checks to see if the value is true or false
+                    if(!(value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false"))) {
+                        LOGGER.severe("[Boolean] Malformed data provided for key: " + key + " - Expected: true or false.");
+                        return null;
+                    }
+                    boolean bool = Boolean.parseBoolean(value);
+                    return type.cast(bool);
+                }
+
+                // Handles String types
+                if(type == String.class) {
                     return type.cast(value);
                 }
+
+                // Handles Integer types
+                if(type == Integer.class) {
+                    try {
+                        int intValue = Integer.parseInt(value);
+                        return type.cast(intValue);
+                    } catch (Exception e) {
+                        LOGGER.severe("[Integer] Malformed data provided for key: " + key + " - Expected: 0 - 9");
+                        return null;
+                    }
+                }
+
+                return null;
             }
         }
 
@@ -88,10 +113,17 @@ public class ConfigParser {
         char[] keyChars = key.toCharArray();
         char[] lineChars = line.toCharArray();
 
+        int keyLength = keyChars.length;
+        int lineLength = lineChars.length;
+
         /*
         Basically just attempts to see if the line contains a key
          */
-        for(int x = 0; x < lineChars.length; x++) {
+        for(int x = 0; x < lineLength; x++) {
+
+            if(x == lineLength || x == keyLength) { // Prevents ArrayOutOfBoundsException
+                break;
+            }
 
             if(lineChars[x] == '#') {
                 break;

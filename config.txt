@@ -6,8 +6,10 @@ output_file=C:\Users\Luciano\Desktop\Programming\Boeing\Projects\JSONProcessingT
 # Date format: MM-dd-yyyy hh:mm:ss
 # Example: 07-01-2020 02:00:10
 
-start_time=07-01-2020 02:00:00
-stop_time=07-01-2020 02:00:11
+start_time=
+stop_time=
 
 search_keyword=
 start_keyword=
+
+multi_line_output=true
