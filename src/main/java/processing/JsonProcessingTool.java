@@ -1,7 +1,6 @@
 package processing;
 
 import com.google.gson.*;
-import config.Config;
 import message.Message;
 import message.MessageManager;
 import util.Settings;
@@ -20,15 +19,13 @@ import java.util.regex.Pattern;
  * @author Luciano Kholos
  */
 public class JsonProcessingTool {
-    private final String path;
     private final Settings settings;
 
     private final MessageManager manager;
 
     private static final Logger LOGGER = Logger.getLogger(JsonProcessingTool.class.getName());
 
-    public JsonProcessingTool(String path, Settings settings) {
-        this.path = path;
+    public JsonProcessingTool(Settings settings) {
         this.settings = settings;
 
         manager = new MessageManager();
@@ -43,13 +40,12 @@ public class JsonProcessingTool {
     public void loadJsonMessages() {
         Pattern pattern = Pattern.compile("[{}\",:]");
 
-        File input = new File(path);
-        if(!input.exists()) {
+        if(!settings.doesInputExist()) {
             LOGGER.severe("Could not find [input.txt] make sure it is in the directory of the .jar file!");
             return;
         }
 
-        try (InputStream is = new FileInputStream(path);
+        try (InputStream is = new FileInputStream(settings.getInputFilePath());
              Reader r = new InputStreamReader(is, "UTF-8");) {
 
             JsonStreamParser p = new JsonStreamParser(r);
@@ -108,8 +104,13 @@ public class JsonProcessingTool {
 
         messages = manager.getMessages();
 
+        if(!settings.doesOutputExist()) {
+            LOGGER.severe("Could not find [output.txt] make sure it is in the directory of the .jar file!");
+            return;
+        }
+
         System.out.println(messages);
-        try(FileWriter writer = new FileWriter(Config.get("output_file", String.class))) {
+        try(FileWriter writer = new FileWriter(settings.getOutputFilePath())) {
             for(Message message : messages) {
                 writer.append(message.getContent() + "\n");
             }

@@ -49,6 +49,9 @@ public class ConfigParser {
      */
     public < T > T get(String key, Class<T> type) {
         if(configContent.isEmpty()) {
+            if(type == Boolean.class) {
+                return type.cast(false);
+            }
             return null;
         }
 
@@ -64,6 +67,9 @@ public class ConfigParser {
                 String value = getValue(line);
 
                 if(value == null || value.isEmpty()) {
+                    if(type == Boolean.class) {
+                        return type.cast(false);
+                    }
                     return null;
                 }
 
@@ -93,9 +99,16 @@ public class ConfigParser {
                         return null;
                     }
                 }
-
-                return null;
             }
+        }
+
+        /*
+        Returns false when it cannot find a value
+        for a key. Only used for booleans since booleans
+        cannot be null.
+         */
+        if(type == Boolean.class) {
+            return type.cast(false);
         }
 
         return null;
