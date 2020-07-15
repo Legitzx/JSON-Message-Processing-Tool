@@ -18,6 +18,9 @@ public class Settings {
     private boolean inputExists;
     private boolean outputExists;
 
+    private boolean searchRegexActive;
+    private boolean startRegexActive;
+
     private final String inputFilePath;
     private final String outputFilePath;
     private final Date start;
@@ -98,11 +101,37 @@ public class Settings {
             outputExists = true;
         }
 
+        // Check for regular expressions
+        if(searchKeywordActive) {
+            searchRegexActive = getRegex(searchKeyword);
+        }
+        if(startKeywordActive) {
+            startRegexActive = getRegex(startKeyword);
+        }
+
         if(!searchKeywordActive && !startKeywordActive && !timeSearchActive) {
             // Something is wrong since all the input values are null
             // throw some error and handle it
             LOGGER.severe("Failed to get values from config. Did you forget to edit the config.txt?");
         }
+    }
+
+    /**
+     * Determines whether or not a value is a regex
+     * @param value         value
+     * @return              true if the value is a regex
+     */
+    private boolean getRegex(String value) {
+        boolean isActive = false;
+
+        if(value.startsWith("regex(")) {
+            if(value.endsWith(")")) {
+                // Ok its a regex
+                isActive = true;
+            }
+        }
+
+        return isActive;
     }
 
     public boolean isSearchKeywordActive() {
@@ -151,5 +180,13 @@ public class Settings {
 
     public String getOutputFilePath() {
         return outputFilePath;
+    }
+
+    public boolean isSearchRegexActive() {
+        return searchRegexActive;
+    }
+
+    public boolean isStartRegexActive() {
+        return startRegexActive;
     }
 }

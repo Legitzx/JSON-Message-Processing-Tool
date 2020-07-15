@@ -1,7 +1,11 @@
 package message;
 
+import util.Settings;
+
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * The MessageManager program manages the messages. It will filter
@@ -10,7 +14,13 @@ import java.util.Date;
  * @author Luciano Kholos
  */
 public class MessageManager {
+    private final Settings settings;
+
     private ArrayList<Message> messages = new ArrayList<>();
+
+    public MessageManager(Settings settings) {
+        this.settings = settings;
+    }
 
     public void addMessage(Message message) {
         this.messages.add(message);
@@ -69,6 +79,27 @@ public class MessageManager {
     public ArrayList<Message> getMessagesByStartKeyword(String startKeyword) {
         ArrayList<Message> keywordMessages = new ArrayList<>();
 
+        // Handle regex (if present)
+        if(settings.isStartRegexActive()) {
+            String regex = extractRegex(startKeyword);
+            Pattern p = Pattern.compile(regex);
+            Matcher m = p.matcher("");
+
+            boolean valid = false;
+
+            for(Message message : messages) {
+                if(m.reset(message.getRegexContent()).find()) {
+                    valid = true;
+                }
+
+                if(valid) {
+                    keywordMessages.add(message);
+                }
+            }
+
+            return keywordMessages;
+        }
+
         boolean started = false;
 
         if(startKeyword.contains(" ")) { // Handle search strings
@@ -120,6 +151,23 @@ public class MessageManager {
     public ArrayList<Message> getMessagesByKeyword(String keyword) {
         ArrayList<Message> keywordMessages = new ArrayList<>();
 
+        // Handle regex (if present)
+        if(settings.isSearchRegexActive()) {
+            String regex = extractRegex(keyword);
+            Pattern p = Pattern.compile(regex);
+            Matcher m = p.matcher("");
+
+            System.out.println(regex);
+
+            for(Message message : messages) {
+                if(m.reset(message.getRegexContent()).find()) {
+                    keywordMessages.add(message);
+                }
+            }
+
+            return keywordMessages;
+        }
+
         if(keyword.contains(" ")) { // Handle search strings
             String[] args = keyword.split(" ");
 
@@ -148,6 +196,18 @@ public class MessageManager {
         }
 
         return keywordMessages;
+    }
+
+    /**
+     * Extracts the regex from a raw value
+     * Raw: regex(someRegex)
+     * Extracted: someRegex
+     * @param value        raw regex
+     * @return             extracted regex
+     */
+    private String extractRegex(String value) {
+        value = value.substring(6);
+        return value.substring(0, value.length() - 1);
     }
 
     public ArrayList<Message> getMessages() {

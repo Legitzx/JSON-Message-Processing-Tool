@@ -22,7 +22,6 @@ public class ConfigParser {
 
     /**
      * Loads the configs content into an array (caching)
-     * @throws IOException      if config file does not exist
      */
     public static ConfigParser load() {
         File file = new File(filePath);

@@ -9,18 +9,24 @@ import java.util.List;
  * @author Luciano Kholos
  */
 public class Message {
-    private String content;
-    private List<String> args;
-    private Date date;
+    private String content; // Contains the raw message
+    private String regexContent; // Content used when dealing with regex (basically the same as args but in the form of a single string)
+    private List<String> args; // List containing a splitted version of the raw message
+    private Date date;  // Contains the timestamp
 
-    public Message(String content, List<String> args, Date date) {
+    public Message(String content, String regexContent, List<String> args, Date date) {
         this.content = content;
+        this.regexContent = regexContent;
         this.args = args;
         this.date = date;
     }
 
     public String getContent() {
         return content;
+    }
+
+    public String getRegexContent() {
+        return regexContent;
     }
 
     public List<String> getArgs() {
