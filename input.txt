@@ -11,13 +11,13 @@
 		"someProperty": "hi",
 		"someOtherProperty": "hey"
 	},
-	"body": "SomeText"
+	"body": "some text search string"
 }
 {
 	"timeStamp": "07-01-2020 02:00:05",
 	"delayMillis": 3472,
 	"properties": {},
-	"body": "keyword"
+	"body": "keyword text"
 }
 {
 	"timeStamp": "07-01-2020 02:00:09",

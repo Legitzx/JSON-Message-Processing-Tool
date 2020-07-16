@@ -2,8 +2,7 @@ package message;
 
 import util.Settings;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -151,13 +150,19 @@ public class MessageManager {
     public ArrayList<Message> getMessagesByKeyword(String keyword) {
         ArrayList<Message> keywordMessages = new ArrayList<>();
 
+        // Determine how many (keywords) are in the keyword (keywords are separated by commas)
+        boolean multipleKeywords = false;
+        String[] keywords = null;
+        if(keyword.contains(",")) {
+            keywords = getKeywords(keyword);
+            multipleKeywords = true;
+        }
+
         // Handle regex (if present)
-        if(settings.isSearchRegexActive()) {
+        if(settings.isSearchRegexActive()) { // TODO: Handle multiple regex
             String regex = extractRegex(keyword);
             Pattern p = Pattern.compile(regex);
             Matcher m = p.matcher("");
-
-            System.out.println(regex);
 
             for(Message message : messages) {
                 if(m.reset(message.getRegexContent()).find()) {
@@ -168,31 +173,29 @@ public class MessageManager {
             return keywordMessages;
         }
 
+        if(multipleKeywords) {
+            for(String word : keywords) {
+                if(word.contains(" ")) {
+                    keywordMessages.addAll(searchString(word));
+                } else {
+                    keywordMessages.addAll(searchKeyword(word));
+                }
+            }
+
+            // Removes duplicates
+            Set<Message> set = new LinkedHashSet<>(keywordMessages);
+            keywordMessages.clear();
+            keywordMessages.addAll(set);
+
+            return keywordMessages;
+        }
+
+        // DEFAULT CASE
         if(keyword.contains(" ")) { // Handle search strings
-            String[] args = keyword.split(" ");
+            keywordMessages.addAll(searchString(keyword));
 
-            boolean valid = false;
-            for(Message message : messages) {
-                for(String arg : args) {
-                    if(message.getArgs().contains(arg)) {
-                        valid = true;
-                    } else {
-                        valid = false;
-                        break;
-                    }
-                }
-
-                if(valid) {
-                    keywordMessages.add(message);
-                    valid = false;
-                }
-            }
         } else { // Handle keywords without whitespace
-            for(Message message : messages) {
-                if(message.getArgs().contains(keyword)) {
-                    keywordMessages.add(message);
-                }
-            }
+            keywordMessages.addAll(searchKeyword(keyword));
         }
 
         return keywordMessages;
@@ -210,6 +213,18 @@ public class MessageManager {
         return value.substring(0, value.length() - 1);
     }
 
+    private ArrayList<String> extractMultipleRegex(String value) {
+        ArrayList<String> regexs = new ArrayList<>();
+
+        String[] args = value.split(",");
+
+        for(String raw : args) {
+            regexs.add(extractRegex(raw));
+        }
+
+        return regexs;
+    }
+
     public ArrayList<Message> getMessages() {
         return this.messages;
     }
@@ -217,5 +232,46 @@ public class MessageManager {
     public void updateMessages(ArrayList<Message> messages) {
         this.messages.clear();
         this.messages.addAll(messages);
+    }
+
+    private String[] getKeywords(String keyword) {
+        return keyword.split(",");
+    }
+
+    private ArrayList<Message> searchString(String keyword) {
+        ArrayList<Message> keywordMessages = new ArrayList<>();
+
+        String[] args = keyword.split(" ");
+
+        boolean valid = false;
+        for(Message message : messages) {
+            for(String arg : args) {
+                if(message.getArgs().contains(arg)) {
+                    valid = true;
+                } else {
+                    valid = false;
+                    break;
+                }
+            }
+
+            if(valid) {
+                keywordMessages.add(message);
+                valid = false;
+            }
+        }
+
+        return keywordMessages;
+    }
+
+    private ArrayList<Message> searchKeyword(String keyword) {
+        ArrayList<Message> keywordMessages = new ArrayList<>();
+
+        for(Message message : messages) {
+            if(message.getArgs().contains(keyword)) {
+                keywordMessages.add(message);
+            }
+        }
+
+        return keywordMessages;
     }
 }

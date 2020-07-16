@@ -8,9 +8,14 @@ output_file=C:\Users\Luciano\Desktop\Programming\Boeing\Projects\JSONProcessingT
 start_time=
 stop_time=
 
-# Regex format: regex(expression) -
-search_keyword=
-start_keyword=regex([a-zA-Z]+)
+# Regex format: regex(expression) - Supported by search_keyword and start_keyword
+# Example: regex([a-zA-Z]+)
+
+# search_keyword supports multiple keywords - Separate using commas (no spaces near commas)
+# Example: keyword,some text search string,keyword2
+
+search_keyword=keyword text,some text search string,4
+start_keyword=
 
 # Makes the JSON "pretty" when outputted
 multi_line_output=false
