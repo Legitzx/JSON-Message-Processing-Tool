@@ -23,7 +23,7 @@
 	"timeStamp": "07-01-2020 02:00:09",
 	"delayMillis": 2692,
 	"properties": {},
-	"body": "test"
+	"body": "some search test"
 }
 {
 	"timeStamp": "07-01-2020 02:00:15",

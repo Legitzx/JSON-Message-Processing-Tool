@@ -1,7 +1,11 @@
 package util;
 
+import config.Config;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -25,7 +29,7 @@ public class Settings {
     private final String outputFilePath;
     private final Date start;
     private final Date end;
-    private final String searchKeyword;
+    private HashMap<String, Boolean> searchKeywordMap;
     private final String startKeyword;
     private final boolean multiLine;
 
@@ -33,11 +37,11 @@ public class Settings {
 
     private static final Logger LOGGER = Logger.getLogger(Settings.class.getName());
 
-    public Settings(String inputFilePath, String outputFilePath, String searchKeyword, String startKeyword, String startRaw, String endRaw, boolean multiLine) {
+    public Settings(String inputFilePath, String outputFilePath, String startKeyword, String startRaw, String endRaw, boolean multiLine) {
         this.inputFilePath = inputFilePath;
         this.outputFilePath = outputFilePath;
 
-        this.searchKeyword = searchKeyword;
+        this.searchKeywordMap = getSearchKeywords();
         this.startKeyword = startKeyword;
 
         this.start = rawToDate(startRaw);
@@ -71,10 +75,20 @@ public class Settings {
      * will run based off the values of the variables.
      */
     private void setUp() {
-        if(searchKeyword == null || searchKeyword.isEmpty()) {
+        if(searchKeywordMap.isEmpty()) {
             searchKeywordActive = false;
         } else {
             searchKeywordActive = true;
+        }
+
+        if(searchKeywordActive) {
+            searchRegexActive = false;
+            for(Map.Entry<String, Boolean> set : searchKeywordMap.entrySet()) {
+                if(set.getValue() == true) {
+                    searchRegexActive = true;
+                    break;
+                }
+            }
         }
 
         if(startKeyword == null || startKeyword.isEmpty()) {
@@ -101,12 +115,8 @@ public class Settings {
             outputExists = true;
         }
 
-        // Check for regular expressions
-        if(searchKeywordActive) {
-            searchRegexActive = getRegex(searchKeyword);
-        }
         if(startKeywordActive) {
-            startRegexActive = getRegex(startKeyword);
+            startRegexActive = isRegex(startKeyword);
         }
 
         if(!searchKeywordActive && !startKeywordActive && !timeSearchActive) {
@@ -121,7 +131,7 @@ public class Settings {
      * @param value         value
      * @return              true if the value is a regex
      */
-    private boolean getRegex(String value) {
+    private boolean isRegex(String value) {
         boolean isActive = false;
 
         if(value.startsWith("regex(")) {
@@ -132,6 +142,27 @@ public class Settings {
         }
 
         return isActive;
+    }
+
+    private HashMap<String, Boolean> getSearchKeywords() {
+        HashMap<String, Boolean> keywords = new HashMap<>();
+
+        String value = "";
+        while(value != null) {
+            value = Config.get("search_keyword", String.class);
+
+            if(value != null && !value.isEmpty()) {
+                //System.out.println(value);
+                if(isRegex(value)) {
+                    keywords.put(value, true);
+                    continue;
+                }
+
+                keywords.put(value, false);
+            }
+        }
+
+        return keywords;
     }
 
     public boolean isSearchKeywordActive() {
@@ -146,8 +177,8 @@ public class Settings {
         return timeSearchActive;
     }
 
-    public String getSearchKeyword() {
-        return searchKeyword;
+    public HashMap<String, Boolean> getSearchKeywordMap() {
+        return searchKeywordMap;
     }
 
     public String getStartKeyword() {

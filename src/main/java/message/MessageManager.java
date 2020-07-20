@@ -2,8 +2,7 @@ package message;
 
 import util.Settings;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -145,55 +144,61 @@ public class MessageManager {
     /**
      * This method will filter out an array
      * of messages based on the specified keyword.
-     * @param keyword       used to filter out messages
      * @return              ArrayList of filtered messages
      */
-    public ArrayList<Message> getMessagesByKeyword(String keyword) {
+    public ArrayList<Message> getMessagesByKeyword() {
         ArrayList<Message> keywordMessages = new ArrayList<>();
 
-        // Handle regex (if present)
-        if(settings.isSearchRegexActive()) {
-            String regex = extractRegex(keyword);
-            Pattern p = Pattern.compile(regex);
-            Matcher m = p.matcher("");
+        for(Map.Entry<String, Boolean> set : settings.getSearchKeywordMap().entrySet()) {
+            String keyword = set.getKey();
 
-            System.out.println(regex);
+            if(set.getValue() == true) { // its a regex -> handle it
+                // Handle regex (if present)
+                if(settings.isSearchRegexActive()) {
+                    String regex = extractRegex(keyword);
+                    Pattern p = Pattern.compile(regex);
+                    Matcher m = p.matcher("");
 
-            for(Message message : messages) {
-                if(m.reset(message.getRegexContent()).find()) {
-                    keywordMessages.add(message);
-                }
-            }
-
-            return keywordMessages;
-        }
-
-        if(keyword.contains(" ")) { // Handle search strings
-            String[] args = keyword.split(" ");
-
-            boolean valid = false;
-            for(Message message : messages) {
-                for(String arg : args) {
-                    if(message.getArgs().contains(arg)) {
-                        valid = true;
-                    } else {
-                        valid = false;
-                        break;
+                    for(Message message : messages) {
+                        if(m.reset(message.getRegexContent()).find()) {
+                            keywordMessages.add(message);
+                        }
                     }
                 }
+            } else { // its not a regex (it could be a single string or search string) -> handle it
+                if(keyword.contains(" ")) { // Handle search strings
+                    String[] args = keyword.split(" ");
 
-                if(valid) {
-                    keywordMessages.add(message);
-                    valid = false;
-                }
-            }
-        } else { // Handle keywords without whitespace
-            for(Message message : messages) {
-                if(message.getArgs().contains(keyword)) {
-                    keywordMessages.add(message);
+                    boolean valid = false;
+                    for(Message message : messages) {
+                        for(String arg : args) {
+                            if(message.getArgs().contains(arg)) {
+                                valid = true;
+                            } else {
+                                valid = false;
+                                break;
+                            }
+                        }
+
+                        if(valid) {
+                            keywordMessages.add(message);
+                            valid = false;
+                        }
+                    }
+                } else { // Handle keywords without whitespace
+                    for(Message message : messages) {
+                        if(message.getArgs().contains(keyword)) {
+                            keywordMessages.add(message);
+                        }
+                    }
                 }
             }
         }
+
+        // Removes duplicates
+        Set<Message> set = new LinkedHashSet<>(keywordMessages);
+        keywordMessages.clear();
+        keywordMessages.addAll(set);
 
         return keywordMessages;
     }

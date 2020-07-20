@@ -99,7 +99,7 @@ public class JsonProcessingTool {
         }
 
         if(settings.isSearchKeywordActive()) {
-            messages.addAll(manager.getMessagesByKeyword(settings.getSearchKeyword()));
+            messages.addAll(manager.getMessagesByKeyword());
             manager.updateMessages(messages);
             messages.clear();
         }

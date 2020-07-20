@@ -20,7 +20,6 @@ public class Main {
         JsonProcessingTool tool = new JsonProcessingTool(new Settings(
                 Config.get("input_file", String.class),
                 Config.get("output_file", String.class),
-                Config.get("search_keyword", String.class),
                 Config.get("start_keyword", String.class),
                 Config.get("start_time", String.class),
                 Config.get("stop_time", String.class),

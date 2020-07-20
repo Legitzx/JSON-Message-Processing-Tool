@@ -1,7 +1,8 @@
 package config;
 
 import java.io.*;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -12,12 +13,12 @@ import java.util.logging.Logger;
  */
 public class ConfigParser {
     private static final String filePath = System.getProperty("user.dir") + "\\config.txt";
-    private static ArrayList<String> configContent = new ArrayList<>();
+    private static HashMap<String, Boolean> configContent = new HashMap<>();
 
     private static final Logger LOGGER = Logger.getLogger(ConfigParser.class.getName());
 
-    private ConfigParser(ArrayList<String> arrayList) {
-        configContent = arrayList;
+    private ConfigParser(HashMap<String, Boolean> configContent) {
+        this.configContent = configContent;
     }
 
     /**
@@ -30,7 +31,7 @@ public class ConfigParser {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))){
             String line;
             while((line = reader.readLine()) != null) {
-                configContent.add(line);
+                configContent.put(line, false);
             }
         } catch (IOException e) { // If the file does not exist -> wipe array
             configContent.clear();
@@ -60,7 +61,14 @@ public class ConfigParser {
         has the valid key, if so it will attempt to
         grab the value.
          */
-        for(String line : configContent) {
+        for(Map.Entry<String, Boolean> set : configContent.entrySet()) {
+            String line = set.getKey();
+            boolean viewed = set.getValue();
+
+            if(viewed) {
+                continue;
+            }
+
             if(isValidKey(key, line)) {
                 // The key is valid -> now get the value
                 String value = getValue(line);
@@ -69,6 +77,8 @@ public class ConfigParser {
                     if(type == Boolean.class) {
                         return type.cast(false);
                     }
+
+                    configContent.put(line, true);
                     return null;
                 }
 
@@ -79,12 +89,14 @@ public class ConfigParser {
                         LOGGER.severe("[Boolean] Malformed data provided for key: " + key + " - Expected: true or false.");
                         return null;
                     }
+                    configContent.put(line, true);
                     boolean bool = Boolean.parseBoolean(value);
                     return type.cast(bool);
                 }
 
                 // Handles String types
                 if(type == String.class) {
+                    configContent.put(line, true);
                     return type.cast(value);
                 }
 
@@ -92,9 +104,11 @@ public class ConfigParser {
                 if(type == Integer.class) {
                     try {
                         int intValue = Integer.parseInt(value);
+                        configContent.put(line, true);
                         return type.cast(intValue);
                     } catch (Exception e) {
                         LOGGER.severe("[Integer] Malformed data provided for key: " + key + " - Expected: 0 - 9");
+                        configContent.put(line, true);
                         return null;
                     }
                 }

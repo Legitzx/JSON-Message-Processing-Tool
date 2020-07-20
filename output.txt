@@ -1,4 +1,1 @@
 {"timeStamp":"07-01-2020 01:59:51","delayMillis":13953,"properties":{"someProperty":"hi","someOtherProperty":"hey"},"body":"SomeText"}
-{"timeStamp":"07-01-2020 02:00:05","delayMillis":3472,"properties":{},"body":"keyword"}
-{"timeStamp":"07-01-2020 02:00:09","delayMillis":2692,"properties":{},"body":"test"}
-{"timeStamp":"07-01-2020 02:00:15","delayMillis":2050,"properties":{},"body":"someText"}
