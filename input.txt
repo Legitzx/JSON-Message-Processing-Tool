@@ -1,33 +1,10 @@
-{
-	"timeStamp": "07-01-2020 02:00:11",
-	"delayMillis": 2050,
-	"properties": {},
-	"body": "4"
-}
-{
-	"timeStamp": "07-01-2020 01:59:51",
-	"delayMillis": 13953,
-	"properties": {
-		"someProperty": "hi",
-		"someOtherProperty": "hey"
-	},
-	"body": "SomeText"
-}
-{
-	"timeStamp": "07-01-2020 02:00:05",
-	"delayMillis": 3472,
-	"properties": {},
-	"body": "keyword"
-}
-{
-	"timeStamp": "07-01-2020 02:00:09",
-	"delayMillis": 2692,
-	"properties": {},
-	"body": "some search test"
-}
-{
-	"timeStamp": "07-01-2020 02:00:15",
-	"delayMillis": 2050,
-	"properties": {},
-	"body": "someText"
-}
+{"timeStamp":"07-01-2020 01:59:51","delayMillis":13953,"properties":{},"body":"1"}
+{"timeStamp":"07-01-2020 02:00:05","delayMillis":3472,"properties":{},"body":"2"}
+{"timeStamp":"07-01-2020 02:00:09","delayMillis":2692,"properties":{},"body":"3"}
+{"timeStamp":"07-01-2020 02:00:11","delayMillis":2050,"properties":{},"body":"4"}
+{"timeStamp":"07-01-2020 02:00:15","delayMillis":2050,"properties":{},"body":"5"}
+{"timeStamp":"07-01-2020 02:00:17","delayMillis":13953,"properties":{},"body":"6"}
+{"timeStamp":"07-01-2020 02:00:20","delayMillis":3472,"properties":{},"body":"7"}
+{"timeStamp":"07-01-2020 02:00:25","delayMillis":2692,"properties":{},"body":"8"}
+{"timeStamp":"07-01-2020 02:00:34","delayMillis":2050,"properties":{},"body":"9"}
+{"timeStamp":"07-01-2020 02:00:66","delayMillis":2050,"properties":{},"body":"10"}

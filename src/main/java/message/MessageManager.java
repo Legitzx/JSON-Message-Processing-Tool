@@ -28,42 +28,48 @@ public class MessageManager {
     /**
      * This method will get all the messages after the start
      * Date and before the end Date.
-     * @param start         Date
-     * @param end           Date
      * @return              all messages between start and end Dates
      */
-    public ArrayList<Message> getMessagesByDate(Date start, Date end) {
+    public ArrayList<Message> getMessagesByDate() {
         ArrayList<Message> startStopMessages = new ArrayList<>();
 
-        if(start == null && end == null) {
-            return null;
-        }
+        for(Map.Entry<Date, Date> set : settings.getTimestampsMap().entrySet()) {
+            Date start = set.getKey();
+            Date end = set.getValue();
 
-        if(start == null) {
-            for(Message message : messages) {
-                if(message.getDate().before(end) || message.getDate().equals(end)) {
-                    startStopMessages.add(message);
+            if(settings.getTimestampsMap().size() == 1) {
+                if(start == null && end == null) {
+                    return null;
+                }
+
+                if(start == null) {
+                    for(Message message : messages) {
+                        if(message.getDate().before(end) || message.getDate().equals(end)) {
+                            startStopMessages.add(message);
+                        }
+                    }
+
+                    return startStopMessages;
+                }
+
+                if(end == null) {
+                    for(Message message : messages) {
+                        if(message.getDate().after(start) || message.getDate().equals(start)) {
+                            startStopMessages.add(message);
+                        }
+                    }
+
+                    return startStopMessages;
                 }
             }
 
-            return startStopMessages;
-        }
-
-        if(end == null) {
             for(Message message : messages) {
-                if(message.getDate().after(start) || message.getDate().equals(start)) {
+                if((message.getDate().after(start) && message.getDate().before(end)) || (message.getDate().toString().equals(start.toString()) || message.getDate().toString().equals(end.toString()))) {
                     startStopMessages.add(message);
                 }
             }
-
-            return startStopMessages;
         }
 
-        for(Message message : messages) {
-            if((message.getDate().after(start) && message.getDate().before(end)) || (message.getDate().toString().equals(start.toString()) || message.getDate().toString().equals(end.toString()))) {
-                startStopMessages.add(message);
-            }
-        }
 
         return startStopMessages;
     }

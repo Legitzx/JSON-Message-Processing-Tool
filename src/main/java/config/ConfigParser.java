@@ -1,7 +1,7 @@
 package config;
 
 import java.io.*;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -13,11 +13,11 @@ import java.util.logging.Logger;
  */
 public class ConfigParser {
     private static final String filePath = System.getProperty("user.dir") + "\\config.txt";
-    private static HashMap<String, Boolean> configContent = new HashMap<>();
+    private static LinkedHashMap<String, Boolean> configContent = new LinkedHashMap<>(); // Used LinkedHashMap to keep insertion order
 
     private static final Logger LOGGER = Logger.getLogger(ConfigParser.class.getName());
 
-    private ConfigParser(HashMap<String, Boolean> configContent) {
+    private ConfigParser(LinkedHashMap<String, Boolean> configContent) {
         this.configContent = configContent;
     }
 

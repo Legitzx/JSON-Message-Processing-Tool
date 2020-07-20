@@ -27,8 +27,7 @@ public class Settings {
 
     private final String inputFilePath;
     private final String outputFilePath;
-    private final Date start;
-    private final Date end;
+    private HashMap<Date, Date> timestampsMap;
     private HashMap<String, Boolean> searchKeywordMap;
     private final String startKeyword;
     private final boolean multiLine;
@@ -37,15 +36,14 @@ public class Settings {
 
     private static final Logger LOGGER = Logger.getLogger(Settings.class.getName());
 
-    public Settings(String inputFilePath, String outputFilePath, String startKeyword, String startRaw, String endRaw, boolean multiLine) {
+    public Settings(String inputFilePath, String outputFilePath, String startKeyword, boolean multiLine) {
         this.inputFilePath = inputFilePath;
         this.outputFilePath = outputFilePath;
 
+        this.timestampsMap = getTimestamps();
+
         this.searchKeywordMap = getSearchKeywords();
         this.startKeyword = startKeyword;
-
-        this.start = rawToDate(startRaw);
-        this.end = rawToDate(endRaw);
 
         this.multiLine = multiLine;
 
@@ -97,7 +95,7 @@ public class Settings {
             startKeywordActive = true;
         }
 
-        if(start == null && end == null) {
+        if(timestampsMap.isEmpty()) {
             timeSearchActive = false;
         } else {
             timeSearchActive = true;
@@ -165,6 +163,26 @@ public class Settings {
         return keywords;
     }
 
+    private HashMap<Date, Date> getTimestamps() {
+        HashMap<Date, Date> timestamps = new HashMap<>();
+
+        Date startKey = new Date();
+        Date endValue = new Date();
+
+        while(startKey != null && endValue != null) {
+            startKey = rawToDate(Config.get("start_time", String.class));
+            endValue = rawToDate(Config.get("stop_time", String.class));
+
+            if(startKey != null && endValue != null) { // Makes sure they are both non null
+                if(endValue.after(startKey)) { // Make sure its a proper start/stop time
+                    timestamps.put(startKey, endValue);
+                }
+            }
+        }
+
+        return timestamps;
+    }
+
     public boolean isSearchKeywordActive() {
         return searchKeywordActive;
     }
@@ -185,12 +203,8 @@ public class Settings {
         return startKeyword;
     }
 
-    public Date getStart() {
-        return start;
-    }
-
-    public Date getEnd() {
-        return end;
+    public HashMap<Date, Date> getTimestampsMap() {
+        return timestampsMap;
     }
 
     public boolean isMultiLine() {

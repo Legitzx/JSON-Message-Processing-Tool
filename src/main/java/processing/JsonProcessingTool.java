@@ -87,7 +87,7 @@ public class JsonProcessingTool {
         ArrayList<Message> messages = new ArrayList<>();
 
         if(settings.isTimeSearchActive()) {
-            messages.addAll(manager.getMessagesByDate(settings.getStart(), settings.getEnd()));
+            messages.addAll(manager.getMessagesByDate());
             manager.updateMessages(messages);
             messages.clear();
         }

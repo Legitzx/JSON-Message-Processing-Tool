@@ -11,7 +11,7 @@ import java.util.logging.Logger;
  * data based on the configs constraints.
  *
  * @author Luciano Kholos
- * @version 0.0.1
+ * @version 0.0.2
  */
 public class Main {
     private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
@@ -21,8 +21,6 @@ public class Main {
                 Config.get("input_file", String.class),
                 Config.get("output_file", String.class),
                 Config.get("start_keyword", String.class),
-                Config.get("start_time", String.class),
-                Config.get("stop_time", String.class),
                 Config.get("multi_line_output", Boolean.class)
         ));
 
