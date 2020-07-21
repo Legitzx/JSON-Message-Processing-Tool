@@ -168,6 +168,11 @@ public class JsonProcessingTool {
         return finalArray;
     }
 
+    /**
+     * Converts Lists to Strings
+     * @param arr       List
+     * @return          String
+     */
     private String arrayToString(List<String> arr) {
         StringBuilder builder = new StringBuilder();
 

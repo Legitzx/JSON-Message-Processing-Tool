@@ -9,13 +9,9 @@ output_file=C:\Users\Luciano\Desktop\Programming\Boeing\Projects\JSONProcessingT
 # Example: 07-01-2020 02:00:10
 #----------------------------------------
 start_time=07-01-2020 01:59:51
-stop_time=07-01-2020 02:00:05
-
-start_time=07-01-2020 02:00:11
-stop_time=07-01-2020 02:00:15
-
-start_time=07-01-2020 02:00:20
-stop_time=07-01-2020 02:00:34
+stop_time=07-01-2020 02:00:09
+start_time=07-01-2020 02:00:05
+stop_time=07-01-2020 02:00:09
 
 #----------------------------------------
 # Regex format: regex(expression) - Supported by search_keyword and start_keyword

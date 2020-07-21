@@ -142,6 +142,10 @@ public class Settings {
         return isActive;
     }
 
+    /**
+     * Gets all the search keywords from the config
+     * @return      all the search keywords
+     */
     private HashMap<String, Boolean> getSearchKeywords() {
         HashMap<String, Boolean> keywords = new HashMap<>();
 
@@ -163,6 +167,10 @@ public class Settings {
         return keywords;
     }
 
+    /**
+     * Gets all the start/stop times from the config
+     * @return      a hashmap of start/stop times
+     */
     private HashMap<Date, Date> getTimestamps() {
         HashMap<Date, Date> timestamps = new HashMap<>();
 
