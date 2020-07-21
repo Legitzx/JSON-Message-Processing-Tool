@@ -177,13 +177,17 @@ public class Settings {
         Date startKey = new Date();
         Date endValue = new Date();
 
-        while(startKey != null && endValue != null) {
+        while(startKey != null || endValue != null) {
             startKey = rawToDate(Config.get("start_time", String.class));
             endValue = rawToDate(Config.get("stop_time", String.class));
 
-            if(startKey != null && endValue != null) { // Makes sure they are both non null
-                if(endValue.after(startKey)) { // Make sure its a proper start/stop time
+            if(startKey != null || endValue != null) {
+                if(startKey == null || endValue == null) {
                     timestamps.put(startKey, endValue);
+                } else {
+                    if(endValue.after(startKey)) { // Make sure its a proper start/stop time
+                        timestamps.put(startKey, endValue);
+                    }
                 }
             }
         }
