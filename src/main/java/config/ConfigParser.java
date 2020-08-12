@@ -12,13 +12,13 @@ import java.util.logging.Logger;
  * @author Luciano Kholos
  */
 public class ConfigParser {
-    private static final String filePath = System.getProperty("user.dir") + "\\config.txt";
-
     /*
     Used LinkedHashMap to keep insertion order.
     If the value is true, the value has already been grabbed using the get method.
      */
     private static LinkedHashMap<String, Boolean> configContent = new LinkedHashMap<>();
+
+    public static String filePath = System.getProperty("user.dir") + "\\config.txt"; //TODO: command line argument
 
     private static final Logger LOGGER = Logger.getLogger(ConfigParser.class.getName());
 

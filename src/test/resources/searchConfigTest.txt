@@ -1,4 +1,4 @@
-input_file=C:\Users\Luciano\Desktop\Programming\Boeing\Projects\JSONProcessingTool\gigmessage.txt
+input_file=C:\Users\Luciano\Desktop\Programming\Boeing\Projects\JSONProcessingTool\input.txt
 output_file=C:\Users\Luciano\Desktop\Programming\Boeing\Projects\JSONProcessingTool\output.txt
 
 # Leave value empty if you do not want it to be ran
@@ -8,18 +8,16 @@ output_file=C:\Users\Luciano\Desktop\Programming\Boeing\Projects\JSONProcessingT
 # Supports multiple start/stop times
 # Example: 07-01-2020 02:00:10
 #----------------------------------------
-start_time=07-01-2020 01:59:51
-stop_time=07-01-2020 02:00:09
-start_time=07-01-2020 02:00:17
-stop_time=07-01-2020 02:00:25
+start_time=
+stop_time=
 
 #----------------------------------------
 # Regex format: regex(expression) - Supported by search_keyword and start_keyword
 # Supports multiple search keywords
 # Example: regex([a-zA-Z]+)
 #----------------------------------------
-search_keyword=1
+search_keyword=hi
 start_keyword=
 
 # Makes the JSON "pretty" when outputted
-multi_line_output=true
+multi_line_output=false

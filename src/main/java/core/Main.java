@@ -1,3 +1,5 @@
+package core;
+
 import config.Config;
 import processing.JsonProcessingTool;
 import util.Settings;
@@ -17,6 +19,8 @@ public class Main {
     private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
+        long start = System.currentTimeMillis();
+
         JsonProcessingTool tool = new JsonProcessingTool(new Settings(
                 Config.get("input_file", String.class),
                 Config.get("output_file", String.class),
@@ -30,5 +34,9 @@ public class Main {
         } catch (IOException e) {
             LOGGER.severe("Invalid File Path");
         }
+
+        long stop = System.currentTimeMillis() - start;
+
+        System.out.println("\n" + "Execution Time: " + stop / 1000.0 + " seconds");
     }
 }

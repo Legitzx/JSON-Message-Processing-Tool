@@ -1,3 +1,4 @@
-{"timeStamp":"07-01-2020 02:00:17","delayMillis":13953,"properties":{},"body":"6"}
-{"timeStamp":"07-01-2020 02:00:20","delayMillis":3472,"properties":{},"body":"7"}
-{"timeStamp":"07-01-2020 02:00:25","delayMillis":2692,"properties":{},"body":"8"}
+{"timeStamp":"07-01-2020 01:59:51","delayMillis":13953,"properties":{"someProperty":"hi"},"body":"1"}
+{"timeStamp":"07-01-2020 02:00:11","delayMillis":2050,"properties":{"someProperty":"hi"},"body":"4"}
+{"timeStamp":"07-01-2020 02:00:25","delayMillis":2692,"properties":{"someProperty":"hi"},"body":"8"}
+{"timeStamp":"07-01-2020 02:00:66","delayMillis":2050,"properties":{"someProperty":"hi"},"body":"10"}
